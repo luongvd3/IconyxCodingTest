@@ -19,13 +19,15 @@
     "@prisma/client": "^5.16.2",
     "@remixicon/react": "^4.2.0",
     "@tremor/react": "^3.17.4",
+    "@uidotdev/usehooks": "^2.4.1",
     "autoprefixer": "^10.4.19",
     "classnames": "^2.5.1",
     "next": "14.2.5",
     "prisma": "^5.16.2",
     "react": "^18",
     "react-dom": "^18",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",

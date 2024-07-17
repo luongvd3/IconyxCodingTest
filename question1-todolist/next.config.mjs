@@ -1,14 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async rewrites() {
-    return {
-      beforeFiles: [
+  async redirects() {
+    return  [
         {
           source: '/',
-          destination: '/1',
+          destination: '/table/1/asc/all',
+          permanent: true,
         },
       ]
-    }
   },
   experimental: {
     typedRoutes: true,

@@ -1,12 +1,14 @@
 'use client'
-import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Button, SelectItem, Select } from "@tremor/react";
+import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Button, Dialog, DialogPanel } from "@tremor/react";
 import Link from "next/link";
 import cn from "classnames";
 import { formatValue } from "@/utils/formatters";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import TopBar from "./TopBar";
+import deleteTodoAction from "@/actions/deleteTodosAction";
 
-export default function TodoTable({ data, pageNum, pageCount, sortOrder, filterType, filterCriteria }: {
+export default function TodoTable({ data, pageNum, pageCount, sortOrder, status, dateRange }: {
     data: {
         id: number;
         title: string;
@@ -19,44 +21,29 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, filterT
     pageNum: number,
     pageCount: number,
     sortOrder: string,
-    filterType: string,
-    filterCriteria: string
+    status: string,
+    dateRange: string
 }) {
-    const router = useRouter();
     const hasNext = pageNum < pageCount;
     const hasPrev = pageNum > 1;
     const cellStyle = 'p-2 truncate';
     const headStyle = 'p-2';
     const textStyle = '!text-wrap line-clamp-3';
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const formData = new FormData(form);
-        console.log(formData.getAll('checkbox'));
-    }
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // submit from inside the modal does not work
+    // workaround is to use ref to get the form
+    const form = useRef<HTMLFormElement>(null);
+
     // onchange function required for react
     function handleCheckboxChange(event: React.ChangeEvent<HTMLInputElement>) {
 
     }
-
-    function handleOrderChange(value: string) {
-        const order = value === "1" ? "asc" : "desc";
-        router.push(`/${pageNum}/${order + (filterType && filterCriteria ? `/${filterType}/${filterCriteria}` : '')}`);
-    }
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="flex justify-between items-center">
-                <h3 className="py-6 text-xl font-semibold">To do list</h3>
-                <Select className="w-48" defaultValue={sortOrder === "asc" ? "1" : "2"} onValueChange={handleOrderChange}>
-                    <SelectItem value="1">Ascending Order</SelectItem>
-                    <SelectItem value="2">Descending Order</SelectItem>
-                </Select>
-                <div className="flex gap-3">
-                    <Link href={`/`} className=""><Button>Add</Button></Link>
-                    <Button type="submit" className="">Delete</Button>
-                </div>
-
-            </div>
+        <form ref={form}>
+            <h3 className="py-3 text-xl font-semibold">To do list</h3>
+            <TopBar sortOrder={sortOrder} status={status} dateRange={dateRange} setIsModalOpen={setIsModalOpen} />
+            <DeletePermissionModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} form={form.current}/>
             <Table className="pb-5">
                 <TableHead className='bg-gray-50'>
                     <TableRow>
@@ -76,7 +63,7 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, filterT
                                 <input type="checkbox" name="checkbox" value={todo.id.toString()} onChange={handleCheckboxChange} />
                             </TableCell>
                             <TableCell className={cn(cellStyle, " max-w-10 hover:underline")}>
-                                <Link href={`/`} className={cn(textStyle, "font-semibold text-gray-800")}>{todo.title}</Link>
+                                <Link href={`/edit/${todo.id}`} className={cn(textStyle, "font-semibold text-gray-800")}>{todo.title}</Link>
                             </TableCell>
                             <TableCell className={cn(cellStyle, "max-w-20")}>
                                 <span className={cn(textStyle)}>{todo.description}</span>
@@ -97,10 +84,45 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, filterT
                     ))}
                 </TableBody>
             </Table>
-            <div className="absolute flex gap-3 justify-end bottom-40 right-0">
-                <Link href={`/${pageNum-1}`} className={hasPrev ? "block" : "hidden"}><Button>Back</Button></Link>
-                <Link href={`/${pageNum+1}`} className={hasNext ? "block" : "hidden"}><Button>Next</Button></Link>
+            <div className="absolute flex gap-3 justify-end bottom-36 right-0 items-center">
+                <div className="font-semibold text-sm">Page {pageNum}/{pageCount}</div>
+                <Link href={`/table/${pageNum - 1}/${sortOrder}/${status}/${dateRange ? dateRange : ""}`} className={hasPrev ? "block" : "hidden"}><Button>Back</Button></Link>
+                <Link href={`/table/${pageNum + 1}/${sortOrder}/${status}/${dateRange ? dateRange : ""}`} className={hasNext ? "block" : "hidden"}><Button>Next</Button></Link>
             </div>
         </form>
     )
+}
+function DeletePermissionModal(
+    { isOpen: isOpenModakOpen, setIsOpen: setIsModalOpen, form }:
+        { isOpen: boolean, setIsOpen: (val: boolean) => void , form: HTMLFormElement | null}) {
+        
+    function handleSubmit(form : HTMLFormElement) {
+        const formData = new FormData(form);
+        const ids = formData.getAll('checkbox');
+        if (ids.length > 0) {
+            const idArray = ids.map((id) => Number(id));
+            deleteTodoAction(idArray);
+        }
+    }
+    return (
+        <Dialog open={isOpenModakOpen} onClose={(val) => setIsModalOpen(val)} static={true}>
+            <DialogPanel>
+                <h3 className="text-lg font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">Delete</h3>
+                <p className="mt-2 leading-6 text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+                    Do you want to delete all selected items?
+                </p>
+                <div className="flex justify-end gap-3">
+                    <Button className="mt-8" type="submit" onClick={() => {
+                        handleSubmit(form!);
+                        setIsModalOpen(false);
+                    } }>
+                        Delete
+                    </Button>
+                    <Button className="mt-8" onClick={() => setIsModalOpen(false)}>
+                        Cancel
+                    </Button>
+                </div>
+            </DialogPanel>
+        </Dialog>
+    );
 }

@@ -18,13 +18,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className + " min-w-[48rem]"}>
         <header>
           <TopNav className="h-20 border-b-4 border-green-800 bg-white" />
         </header>
-        {children}
+        <section className='px-3 xl:grid xl:grid-cols-sidebar-content-miniCharts 2xl:grid-cols-lgSidebar-content-charts'>
+          <section className='overflow-auto xl:row-span-2 xl:overflow-visible bg-white'>
+
+          </section>
+
+
+          {children}
+
+          <section className='w-full px-3 py-5 xl:h-full 2xl:px-8 bg-white'>
+
+          </section>
+        </section>
         <footer>
-          <Footer className="bg-gray-50 xl:grid xl:grid-cols-sidebar-content-miniCharts 2xl:grid-cols-lgSidebar-content-charts"/>
+          <Footer className="bg-gray-50 xl:grid xl:grid-cols-sidebar-content-miniCharts 2xl:grid-cols-lgSidebar-content-charts" />
         </footer>
       </body>
     </html>

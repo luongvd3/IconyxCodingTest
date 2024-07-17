@@ -41,7 +41,7 @@ const config: Config = {
             emphasis: colors.gray[700],
           },
           border: {
-            DEFAULT: colors.transparent,
+            DEFAULT: colors.gray[200],
           },
           ring: {
             DEFAULT: colors.gray[200],
