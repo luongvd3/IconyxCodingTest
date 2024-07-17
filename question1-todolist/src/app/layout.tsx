@@ -4,7 +4,7 @@ import "./globals.css";
 import TopNav from "@/components/TopNav";
 import Footer from "@/components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: "block" });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +24,7 @@ export default function RootLayout({
         </header>
         {children}
         <footer>
-          <Footer className="bg-gray-50 lg:grid lg:grid-cols-sidebar-content xl:grid-cols-sidebar-content-miniCharts 2xl:grid-cols-lgSidebar-content-charts"/>
+          <Footer className="bg-gray-50 xl:grid xl:grid-cols-sidebar-content-miniCharts 2xl:grid-cols-lgSidebar-content-charts"/>
         </footer>
       </body>
     </html>

@@ -1,8 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-      typedRoutes: true,
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/',
+          destination: '/1',
+        },
+      ]
     }
+  },
+  experimental: {
+    typedRoutes: true,
+  }
 };
 
 export default nextConfig;
