@@ -1,7 +1,7 @@
 The project is written in NextJs, Prima and SQLite
 
 Unit tests has created on create and edit/update operations using Jest. 
-Reading and Deleting Operations are mostly handled by Prisma so no Unit tests were written for these operation.
+Reading and Deleting Operations are mostly handled by Prisma so no Unit tests were written for these operations.
 
 Running Instruction:
 
