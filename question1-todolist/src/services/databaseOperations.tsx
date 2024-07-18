@@ -48,7 +48,7 @@ export async function GetSingleTodo(id: number) {
 }
 
 export async function CreateTodo(data: { symbol: string; title: string; description: string; dueDate: string; price: number; status: boolean }) {
-    await prisma.todo.create({
+    return await prisma.todo.create({
         data: {
             title: data.title,
             description: data.description,
@@ -61,7 +61,7 @@ export async function CreateTodo(data: { symbol: string; title: string; descript
 }
 
 export async function UpdateTodo(data: {id: number, symbol: string; title: string; description: string; dueDate: string; price: number; status: boolean }) {
-    await prisma.todo.update({
+    return await prisma.todo.update({
         where: {
             id : data.id
           },

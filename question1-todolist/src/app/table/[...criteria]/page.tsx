@@ -7,8 +7,8 @@ export default async function Page({params}:{params:{criteria: string[]}}) {
   const sortOrder = params.criteria[1] === 'asc' ? 'asc' : 'desc'
   const status = params.criteria[2] === 'complete' ? 'complete' : params.criteria[2] === 'incomplete' ? 'incomplete' : 'all'
   const dateRange = params.criteria[3]
-  const fromDate = dateRange ? new Date(dateRange.split('%20')[0].split("T")[0]) : undefined
-  const toDate = dateRange ? new Date(dateRange.split('%20')[1].split("T")[0]) : undefined
+  const fromDate = dateRange && dateRange != "undefined" ? new Date(dateRange.split('%20')[0].split("T")[0]) : undefined
+  const toDate = dateRange && dateRange != "undefined" ? new Date(dateRange.split('%20')[1].split("T")[0]) : undefined
   const take = 7
   const skip = (pageNum - 1) * take
   const count = await CountTodos(status, fromDate, toDate)

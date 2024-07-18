@@ -38,7 +38,7 @@ export default function TopBar( {sortOrder, status, dateRange, setIsModalOpen}
                 className="mx-auto max-w-md" 
                 selectPlaceholder="Filter"
                 onValueChange={handleDateFilter}
-                defaultValue={dateRange ? {from: new Date(dateRange.split("%20")[0].split("T")[0]), to: new Date(dateRange.split("%20")[1].split("T")[0])} : undefined}
+                defaultValue={dateRange && dateRange != "undefined" ? {from: new Date(dateRange.split("%20")[0].split("T")[0]), to: new Date(dateRange.split("%20")[1].split("T")[0])} : undefined}
             >    
 
             </DateRangePicker>
