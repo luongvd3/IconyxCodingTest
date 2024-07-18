@@ -106,7 +106,7 @@ export default function AddTodoForm() {
         placeholder="Symbol..."
         onChange={handleSymbolChange}
         //Only show error if the form has been touched
-        error={isFormFresh ? false : results?.price ? false : true}
+        error={isFormFresh.current ? false : results?.price ? false : true}
         errorMessage="Invalid Symbol"
       />
     </div>
