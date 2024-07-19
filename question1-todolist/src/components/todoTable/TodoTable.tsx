@@ -36,7 +36,7 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, status,
 
     return (
         <form ref={form}>
-            <h3 className="py-3 text-xl font-semibold">To do list</h3>
+            <h3 className="py-3 text-xl font-semibold">To-do list</h3>
             <TopBar sortOrder={sortOrder} status={status} dateRange={dateRange} setIsModalOpen={setIsModalOpen} />
             <DeletePermissionModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} form={form.current}/>
             <Table className="pb-5">

@@ -25,9 +25,9 @@ export default function TopBar( {sortOrder, status, dateRange, setIsModalOpen}
     }
     return (   
         <div className="flex items-center justify-between gap-1 pb-3">
-            <Select className="w-48" defaultValue={sortOrder === "asc" ? "1" : "2"} onValueChange={handleOrderChange}>
-                <SelectItem value="1">Ascending Order</SelectItem>
-                <SelectItem value="2">Descending Order</SelectItem>
+            <Select className="w-56" defaultValue={sortOrder === "asc" ? "1" : "2"} onValueChange={handleOrderChange}>
+                <SelectItem value="1">Due Date Ascending</SelectItem>
+                <SelectItem value="2">Due Date Descending</SelectItem>
             </Select>
             <Select className="w-48" defaultValue={status === "all" ? "1" : status === "complete" ? "2" : "3"} onValueChange={handleStatusFilter}>
                 <SelectItem value="1">All Todos</SelectItem>
@@ -36,7 +36,7 @@ export default function TopBar( {sortOrder, status, dateRange, setIsModalOpen}
             </Select>
             <DateRangePicker 
                 className="mx-auto max-w-md" 
-                selectPlaceholder="Filter"
+                selectPlaceholder="Due Date"
                 onValueChange={handleDateFilter}
                 defaultValue={dateRange && dateRange != "undefined" ? {from: new Date(dateRange.split("%20")[0].split("T")[0]), to: new Date(dateRange.split("%20")[1].split("T")[0])} : undefined}
             >    

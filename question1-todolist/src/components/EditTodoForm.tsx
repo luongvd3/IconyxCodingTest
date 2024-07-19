@@ -158,7 +158,7 @@ export default function EditTodoForm({todo}: {todo: {
       </Select>
     </div>
     <div className="flex gap-2">
-      <Button className="" disabled={isFormPending || ((results?.price && datePickerInput )? false : true)}>Edit</Button>
+      <Button className="" disabled={isFormPending || ((results?.price && datePickerInput )? false : true)}>Save</Button>
       <Link href={`/`}> <Button className="">Cancel</Button></Link>
     </div>
   </form>;
