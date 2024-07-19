@@ -122,7 +122,7 @@ export default function EditTodoForm({todo}: {todo: {
       <div className="flex h-8 items-center">
         <label htmlFor="symbol" className="block">Symbol</label>
         <Icon icon={RiInformationFill} className={cn()} variant="simple" tooltip="Symbol must be from 1-10 charaters" size="md" />
-        <Icon icon={RiLoader5Line} className={cn("animate-spin", isSearching ? "block" : "hidden")} variant="simple" tooltip="simple" size="md" />
+        <Icon icon={RiLoader5Line} className={cn("animate-spin", isSearching ? "block" : "hidden")} variant="simple" size="md" />
       </div>
       <TextInput
         id="symbol"
@@ -139,7 +139,7 @@ export default function EditTodoForm({todo}: {todo: {
     <div>
       <div className="flex h-8 items-center">
         <label htmlFor="price" className="block">Price</label>
-        <Icon icon={RiLoader5Line} className={cn("animate-spin", isSearching ? "block" : "hidden")} variant="simple" tooltip="simple" size="md" />
+        <Icon icon={RiLoader5Line} className={cn("animate-spin", isSearching ? "block" : "hidden")} variant="simple" size="md" />
       </div>
       <TextInput
         id="price"
