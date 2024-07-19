@@ -24,7 +24,7 @@ export default function TopBar( {sortOrder, status, dateRange, setIsModalOpen}
         }
     }
     return (   
-        <div className="flex justify-between items-center pb-3 gap-1">
+        <div className="flex items-center justify-between gap-1 pb-3">
             <Select className="w-48" defaultValue={sortOrder === "asc" ? "1" : "2"} onValueChange={handleOrderChange}>
                 <SelectItem value="1">Ascending Order</SelectItem>
                 <SelectItem value="2">Descending Order</SelectItem>

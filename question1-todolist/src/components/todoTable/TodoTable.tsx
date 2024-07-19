@@ -53,7 +53,7 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, status,
                 </TableHead>
                 <TableBody>
                     {data.map((todo) => (
-                        <TableRow key={todo.id} className='font-medium h-20 even:bg-blue-50'>
+                        <TableRow key={todo.id} className='h-20 font-medium even:bg-blue-50'>
                             <TableCell className={cn(cellStyle, " max-w-3 text-center hover:underline")}>
                                 <input type="checkbox" name="checkbox" value={todo.id.toString()} onChange={() => {return}} />
                             </TableCell>
@@ -79,8 +79,8 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, status,
                     ))}
                 </TableBody>
             </Table>
-            <div className="absolute flex gap-3 justify-end bottom-36 right-0 items-center">
-                <div className="font-semibold text-sm">Page {pageNum}/{pageCount}</div>
+            <div className="absolute bottom-36 right-0 flex items-center justify-end gap-3">
+                <div className="text-sm font-semibold">Page {pageNum}/{pageCount}</div>
                 <Link href={`/table/${pageNum - 1}/${sortOrder}/${status}/${dateRange ? dateRange : ""}`}><Button disabled={!hasPrev}>Back</Button></Link>
                 <Link href={`/table/${pageNum + 1}/${sortOrder}/${status}/${dateRange ? dateRange : ""}`}><Button disabled={!hasNext}>Next</Button></Link>
             </div>
@@ -103,7 +103,7 @@ function DeletePermissionModal(
         <Dialog open={isOpenModakOpen} onClose={(val) => setIsModalOpen(val)} static={true}>
             <DialogPanel>
                 <h3 className="text-lg font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">Delete</h3>
-                <p className="mt-2 leading-6 text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+                <p className="mt-2 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
                     Do you want to delete all selected items?
                 </p>
                 <div className="flex justify-end gap-3">

@@ -74,14 +74,14 @@ export default function AddTodoForm() {
   return <form className="flex flex-col gap-5 px-3 py-5" action={formAction}>
     <div className="text-green-600">{validationMessage.status}</div>
     <div>
-      <div className="flex items-center h-8">
+      <div className="flex h-8 items-center">
         <label htmlFor="title" className="block">Title</label>
         <Icon icon={RiInformationFill} className={cn()} variant="simple" tooltip="Title must be from 1-64 charaters" size="md" />
       </div>
       <TextInput id="title" name="title" className="max-w-sm" placeholder="Title..." error={validationMessage.title} errorMessage={validationMessage.title}/>
     </div>
     <div>
-      <div className="flex items-center h-8">
+      <div className="flex h-8 items-center">
         <label htmlFor="description" className="block">Description</label>
         <Icon icon={RiInformationFill} className={cn()} variant="simple" tooltip="Description must be from 1-255 charaters" size="md" />
       </div>
@@ -94,7 +94,7 @@ export default function AddTodoForm() {
       <input className="hidden" name="dueDate" value={datePickerInput} type="text" onChange={() => {return}}/>
     </div>
     <div>
-      <div className="flex items-center h-8">
+      <div className="flex h-8 items-center">
         <label htmlFor="symbol" className="block">Symbol</label>
         <Icon icon={RiInformationFill} className={cn()} variant="simple" tooltip="Symbol must be from 1-10 charaters" size="md" />
         <Icon icon={RiLoader5Line} className={cn("animate-spin", isSearching ? "block" : "hidden")} variant="simple" tooltip="simple" size="md" />
@@ -111,7 +111,7 @@ export default function AddTodoForm() {
       />
     </div>
     <div>
-      <div className="flex items-center h-8">
+      <div className="flex h-8 items-center">
         <label htmlFor="price" className="block">Price</label>
         <Icon icon={RiLoader5Line} className={cn("animate-spin", isSearching ? "block" : "hidden")} variant="simple" tooltip="simple" size="md" />
       </div>
@@ -131,7 +131,7 @@ export default function AddTodoForm() {
         <SelectItem value="2">Incomplete</SelectItem>
       </Select>
     </div>
-    <div className="flex justtify-start gap-2">
+    <div className="flex gap-2">
       <Button className="" disabled={isFormPending || ((results?.price && datePickerInput )? false : true)}>Add</Button>
       <Link href={`/`}> <Button className="">Cancel</Button></Link>
     </div>

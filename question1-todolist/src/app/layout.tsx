@@ -24,10 +24,10 @@ export default function RootLayout({
         </header>
         <section className='px-3 xl:grid xl:grid-cols-sidebar-content-miniCharts 2xl:grid-cols-lgSidebar-content-charts'>
           {/* Empty block for responsive ui */}
-          <section className='overflow-auto xl:row-span-2 xl:overflow-visible bg-white'></section>
+          <section className='overflow-auto bg-white xl:row-span-2 xl:overflow-visible'></section>
           {children}
           {/* Empty block for responsive ui */}
-          <section className='w-full px-3 py-5 xl:h-full 2xl:px-8 bg-white'></section>
+          <section className='w-full bg-white px-3 py-5 xl:h-full 2xl:px-8'></section>
         </section>
         <footer>
           <Footer className="bg-gray-50 xl:grid xl:grid-cols-sidebar-content-miniCharts 2xl:grid-cols-lgSidebar-content-charts" />

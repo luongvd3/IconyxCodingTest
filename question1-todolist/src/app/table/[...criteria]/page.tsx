@@ -32,7 +32,7 @@ export default async function Page({params}:{params:{criteria: string[]}}) {
     })
   }
   return (
-      <main className='h-[56rem] bg-white relative'>
+      <main className='relative h-[56rem] bg-white'>
         <TodoTable 
           data={data} 
           pageCount={pageCount} 
