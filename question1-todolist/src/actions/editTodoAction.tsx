@@ -45,7 +45,7 @@ export default async function editTodoAction(prevState: any, formData: FormData)
         await UpdateTodo(data)          
         revalidatePath('/table')
         return {
-            message : "{\"status\":\"To do edited successfully!\"}"
+            message : "{\"status\":\"To-Do edited successfully!\"}"
         }
     }
 }

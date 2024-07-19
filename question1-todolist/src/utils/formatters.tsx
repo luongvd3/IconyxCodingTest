@@ -39,6 +39,7 @@ export function getPageCriteria(criteria: string[]): {
       filterCriteria: criteria[3],
     };
 }
+
 //For testing purposes
 export function generateRandomString(length:number): string {
   let result = '';

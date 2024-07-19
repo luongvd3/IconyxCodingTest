@@ -33,11 +33,13 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, status,
     // submit from inside the modal does not work
     // workaround is to use ref to get the form
     const form = useRef<HTMLFormElement>(null);
+    // number of checkboxes checked, if 0, delete button is disabled
+    const [boxCheckedNum, setBoxCheckedNum] = useState(0);
 
     return (
         <form ref={form}>
-            <h3 className="py-3 text-xl font-semibold">To-do list</h3>
-            <TopBar sortOrder={sortOrder} status={status} dateRange={dateRange} setIsModalOpen={setIsModalOpen} />
+            <h3 className="py-3 text-xl font-semibold">To-Do List</h3>
+            <TopBar sortOrder={sortOrder} status={status} dateRange={dateRange} setIsModalOpen={setIsModalOpen} boxCheckedNum={boxCheckedNum}/>
             <DeletePermissionModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} form={form.current}/>
             <Table className="pb-5">
                 <TableHead className='bg-gray-50'>
@@ -55,7 +57,13 @@ export default function TodoTable({ data, pageNum, pageCount, sortOrder, status,
                     {data.map((todo) => (
                         <TableRow key={todo.id} className='h-20 font-medium even:bg-blue-50'>
                             <TableCell className={cn(cellStyle, " max-w-3 text-center hover:underline")}>
-                                <input type="checkbox" name="checkbox" value={todo.id.toString()} onChange={() => {return}} />
+                                <input type="checkbox" name="checkbox" value={todo.id.toString()} onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setBoxCheckedNum((prev) => prev + 1);
+                                    } else {
+                                        setBoxCheckedNum((prev) => prev - 1);
+                                    }
+                                }} />
                             </TableCell>
                             <TableCell className={cn(cellStyle, " max-w-10 hover:underline")}>
                                 <Link href={`/edit/${todo.id}`} className={cn(textStyle, "font-semibold text-gray-800")}>{todo.title}</Link>

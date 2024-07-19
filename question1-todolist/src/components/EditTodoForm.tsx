@@ -42,18 +42,27 @@ export default function EditTodoForm({todo}: {todo: {
 
   const searchStocks = async (searchTerm: string, signal: AbortSignal) => {
     setIsSearching(true);
-    const data = await fetch(`${base_url}/api/price?symbol=${encodeURIComponent(searchTerm)}`, {
-      signal: signal,
-      cache: "no-store"
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText);
+    try {
+      const data = await fetch(`${base_url}/api/price?symbol=${encodeURIComponent(searchTerm)}`, {
+        signal: signal,
+        cache: "no-store"
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json()
+      })
+      setIsSearching(false);
+      setResults(data);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+            return;
+        }
+      } else {
+        setIsSearching(false);
       }
-      return res.json()
-    })
-    setIsSearching(false);
-    setResults(data);
-    return data;
+    }
   };
 
   const handleSymbolChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +155,7 @@ export default function EditTodoForm({todo}: {todo: {
         name="price"
         className="max-w-sm"
         placeholder="Price..."
-        disabled={false}
+        readOnly
         value={results?.price ? results.price : ""}
       />
     </div>

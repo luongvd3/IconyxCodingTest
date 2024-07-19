@@ -42,7 +42,7 @@ export default async function creatTodoAction(prevState: any, formData: FormData
         await CreateTodo(data)          
         revalidatePath('/table')
         return {
-            message : "{\"status\":\"To do added successfully!\"}"
+            message : "{\"status\":\"To-Do added successfully!\"}"
         }
     }
 }

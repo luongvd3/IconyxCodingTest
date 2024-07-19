@@ -3,7 +3,7 @@ import { TextInput, Textarea, DatePicker, Select, SelectItem, Button, Icon, Date
 import { useFormState, useFormStatus } from 'react-dom';
 import { useDebounce } from '@uidotdev/usehooks';
 import createTodoAction from "@/actions/createTodoActions";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { RiInformationFill, RiLoader5Line } from "@remixicon/react";
 import cn from "classnames";
 import Link from "next/link";
@@ -69,6 +69,7 @@ export default function AddTodoForm() {
     };
   }, [debouncedSearchTerm]);
 
+
   const validationMessage = JSON.parse(formState.message);
 
   return <form className="flex flex-col gap-5 px-3 py-5" action={formAction}>
@@ -85,7 +86,14 @@ export default function AddTodoForm() {
         <label htmlFor="description" className="block">Description</label>
         <Icon icon={RiInformationFill} className={cn()} variant="simple" tooltip="Description must be from 1-255 charaters" size="md" />
       </div>
-      <Textarea id="description" name="description" className="max-w-sm" placeholder="Description..." error={validationMessage.description} errorMessage={validationMessage.description}/>
+      <Textarea 
+        id="description" 
+        name="description" 
+        className="max-w-sm" 
+        placeholder="Description..."
+        error={validationMessage.description} 
+        errorMessage={validationMessage.description}
+      />
     </div>
     <div>
       <label htmlFor="dueDate" className="block h-8">Due Date</label>
@@ -120,7 +128,7 @@ export default function AddTodoForm() {
         name="price"
         className="max-w-sm"
         placeholder="Price..."
-        disabled={false}
+        readOnly
         value={results?.price ? results.price : ""}
       />
     </div>
