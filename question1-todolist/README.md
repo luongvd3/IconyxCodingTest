@@ -7,7 +7,6 @@ Running Instruction:
 
 - after cloning the repository, from the local CLI navigate to "question1-todolist"
 - run "npm install"
-- make sure that "prisma/dev.db" exist. For convenience, a testing "dev.db" was pushed to Github
 - For development environment:
   - create ".env.development" file in the root directory with the following content:  
       API_KEY="{replaced with a valid twelvedata apikey, one is included with the sent email}"  
@@ -15,6 +14,7 @@ Running Instruction:
       NEXT_PUBLIC_FRONTEND_URL="http://localhost:3000" 
   - create ".env" file in the root directory with the following content: 
       DATABASE_URL="file:./dev.db" 
+  - from the root directory create "prisma/dev.db" then run "npx prisma db push"
   - run "npx prisma db seed" to refresh the db with new seed data if necessary
   - run "npm run dev" to run the application 
 - For production environment:
@@ -23,6 +23,7 @@ Running Instruction:
       API_URL="https://api.twelvedata.com"  
       NEXT_PUBLIC_FRONTEND_URL="http://{your-server-ip-address}:3000" 
       DATABASE_URL="file:./dev.db" 
+  - from the root directory create "prisma/dev.db" then run "npx prisma db push"
   - run "npx prisma db seed" to refresh the db with new seed data if necessary
   - run "npm run build" then "npm run start" to start the application
 - visit NEXT_PUBLIC_FRONTEND_URL to access the app
