@@ -39,7 +39,7 @@ export default function TopBar( {sortOrder, status, dateRange, setIsModalOpen, b
                 <SelectItem value="3">Incomplete</SelectItem>
             </Select>
             <DateRangePicker 
-                className="mx-auto max-w-md" 
+                className="mx-auto max-w-sm" 
                 selectPlaceholder="Due Date"
                 onValueChange={handleDateFilter}
                 defaultValue={
