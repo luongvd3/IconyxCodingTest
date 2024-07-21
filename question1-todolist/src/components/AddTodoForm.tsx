@@ -188,5 +188,5 @@ export default function AddTodoForm() {
 
 function Submit({price, datePickerInput}: {price: {price: number}, datePickerInput: string}) {
   const {pending} = useFormStatus();
-  return <Button className="" disabled={(!pending && ((price?.price && datePickerInput )) ? false : true)}>Save</Button>
+  return <Button className="" disabled={(!pending && ((price?.price && datePickerInput )) ? false : true)}>Add</Button>
 }
