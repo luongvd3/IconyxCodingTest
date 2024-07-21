@@ -1,5 +1,5 @@
 'use client'
-import { TextInput, Textarea, DatePicker, Select, SelectItem, Button, Icon, DatePickerValue } from "@tremor/react";
+import { TextInput, Textarea, DatePicker, Select, SelectItem, Button, Icon, DatePickerValue, Callout } from "@tremor/react";
 import { useFormState, useFormStatus } from 'react-dom';
 import { useDebounce } from '@uidotdev/usehooks';
 import editTodoAction from "@/actions/editTodoAction";
@@ -23,15 +23,14 @@ export default function EditTodoForm({todo}: {todo: {
   //States to toggle the loading spinner and display the search results of searching for a stock symbol and price
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [results, setResults] = useState<any>({
+  const [price, setPrice] = useState<any>({
     price: todo.price,
   });
 
   //Debounce the search term to prevent too many requests
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  //Form state and status to show pending state and validation messages from the backend
-  const { pending: isFormPending } = useFormStatus()
+  //Form state to show validation messages from the backend
   const [formState, formAction] = useFormState(editTodoAction, initialState)
 
   //State to update the hidden input field with the value from the DatePicker component and update UI
@@ -53,7 +52,7 @@ export default function EditTodoForm({todo}: {todo: {
         return res.json()
       })
       setIsSearching(false);
-      setResults(data);
+      setPrice(data);
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
@@ -87,9 +86,9 @@ export default function EditTodoForm({todo}: {todo: {
   }, [debouncedSearchTerm]);
 
   const validationMessage = JSON.parse(formState.message);
-
   return <form className="flex flex-col gap-5 px-3 py-5" action={formAction}>
-    <div className="text-green-600">{validationMessage.status}</div>
+    <Callout title={validationMessage.status} color="teal" className={validationMessage.status ? "block" : "hidden"}>      
+    </Callout>
     <input className="hidden" name="id" value={todo.id} type="text" onChange={() => {return}}/>
     <div>
       <div className="flex h-8 items-center">
@@ -141,7 +140,7 @@ export default function EditTodoForm({todo}: {todo: {
         placeholder="Symbol..."
         onChange={handleSymbolChange}
         // Only show error if the form has been touched
-        error={isFormFresh.current ? false : results?.price ? false : true}
+        error={isFormFresh.current ? false : price?.price ? false : true}
         errorMessage="Invalid Symbol"
       />
     </div>
@@ -156,7 +155,7 @@ export default function EditTodoForm({todo}: {todo: {
         className="max-w-sm"
         placeholder="Price..."
         readOnly
-        value={results?.price ? results.price : ""}
+        value={price?.price ? price.price : ""}
       />
     </div>
     <div>
@@ -167,8 +166,12 @@ export default function EditTodoForm({todo}: {todo: {
       </Select>
     </div>
     <div className="flex gap-2">
-      <Button className="" disabled={isFormPending || ((results?.price && datePickerInput )? false : true)}>Save</Button>
+      <Submit price={price} datePickerInput={datePickerInput}/>
       <Link href={`/`}> <Button className="">Cancel</Button></Link>
     </div>
   </form>;
+}
+function Submit({price, datePickerInput}: {price: {price: number}, datePickerInput: string}) {
+  const {pending} = useFormStatus();
+  return <Button className="" disabled={(!pending && ((price?.price && datePickerInput )) ? false : true)}>Save</Button>
 }

@@ -1,5 +1,6 @@
 'use server'
 import { CreateTodo, deleteTodo } from "@/services/databaseOperations"
+import sleep from "@/utils/sleep"
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 const schema = z.object({
@@ -39,7 +40,9 @@ export default async function creatTodoAction(prevState: any, formData: FormData
         }
     } else {
         const data = validatedFields.data
-        await CreateTodo(data)          
+        await CreateTodo(data)
+        // 0.2 seconds delay to prevent double click
+        await sleep(0.2)          
         revalidatePath('/table')
         return {
             message : "{\"status\":\"To-Do added successfully!\"}"

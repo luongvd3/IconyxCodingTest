@@ -1,5 +1,5 @@
 'use client'
-import { TextInput, Textarea, DatePicker, Select, SelectItem, Button, Icon, DatePickerValue } from "@tremor/react";
+import { TextInput, Textarea, DatePicker, Select, SelectItem, Button, Icon, DatePickerValue, Callout } from "@tremor/react";
 import { useFormState, useFormStatus } from 'react-dom';
 import { useDebounce } from '@uidotdev/usehooks';
 import createTodoAction from "@/actions/createTodoActions";
@@ -15,13 +15,12 @@ export default function AddTodoForm() {
   //States to toggle the loading spinner and display the search results of searching for a stock symbol and price
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [results, setResults] = useState<any>({});
+  const [price, setPrice] = useState<any>({});
 
   //Debounce the search term to prevent too many requests
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  //Form state and status to show pending state and validation messages from the backend  
-  const { pending: isFormPending } = useFormStatus()
+  //Form state to show validation messages from the backend  
   const [formState, formAction] = useFormState(createTodoAction, initialState)
 
   //State to update the hidden input field with the value from the DatePicker component and update UI
@@ -32,21 +31,31 @@ export default function AddTodoForm() {
 
   const searchStocks = async (searchTerm: string, signal: AbortSignal) => {
     setIsSearching(true);
-    const data = await fetch(`${base_url}/api/price?symbol=${encodeURIComponent(searchTerm)}`, {
-      signal: signal,
-      cache: "no-store"
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText);
+    try {
+      const data = await fetch(`${base_url}/api/price?symbol=${encodeURIComponent(searchTerm)}`, {
+        signal: signal,
+        cache: "no-store"
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json()
+      })
+      setIsSearching(false);
+      setPrice(data);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+            return;
+        }
+      } else {
+        setIsSearching(false);
       }
-      return res.json()
-    })
-    setIsSearching(false);
-    setResults(data);
-    return data;
+    }
   };
 
-  const handleSymbolChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSymbolChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
+    setFormFields((prev) => ({...prev, symbol: event.target.value}))
     setSearchTerm(event.target.value);
     isFormFresh.current = false;
   };
@@ -69,17 +78,45 @@ export default function AddTodoForm() {
     };
   }, [debouncedSearchTerm]);
 
+  const [formFields, setFormFields] = useState({
+    title: "",
+    description: "",
+    symbol: "",
+  });
 
   const validationMessage = JSON.parse(formState.message);
 
+  useEffect(() => {
+    if (validationMessage.status) {
+      isFormFresh.current = true;
+      setFormFields({
+        title: "",
+        description: "",
+        symbol: "",
+      });      
+      setSearchTerm("");
+      setPrice({});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState]);
   return <form className="flex flex-col gap-5 px-3 py-5" action={formAction}>
-    <div className="text-green-600">{validationMessage.status}</div>
+    <Callout title={validationMessage.status + " A new To-Do can be created."} color="teal" className={validationMessage.status ? "block" : "hidden"}>      
+    </Callout>
     <div>
       <div className="flex h-8 items-center">
         <label htmlFor="title" className="block">Title</label>
         <Icon icon={RiInformationFill} className={cn()} variant="simple" tooltip="Title must be from 1-64 charaters" size="md" />
       </div>
-      <TextInput id="title" name="title" className="max-w-sm" placeholder="Title..." error={validationMessage.title} errorMessage={validationMessage.title}/>
+      <TextInput 
+        id="title" 
+        name="title" 
+        className="max-w-sm" 
+        placeholder="Title..." 
+        error={validationMessage.title} 
+        errorMessage={validationMessage.title}
+        value={formFields.title}
+        onChange={(e) => setFormFields((prev) => ({...prev, title: e.target.value}))}
+      />
     </div>
     <div>
       <div className="flex h-8 items-center">
@@ -93,6 +130,8 @@ export default function AddTodoForm() {
         placeholder="Description..."
         error={validationMessage.description} 
         errorMessage={validationMessage.description}
+        value={formFields.description}
+        onChange={(e) => setFormFields((prev) => ({...prev, description: e.target.value}))}
       />
     </div>
     <div>
@@ -114,8 +153,9 @@ export default function AddTodoForm() {
         placeholder="Symbol..."
         onChange={handleSymbolChange}
         //Only show error if the form has been touched
-        error={isFormFresh.current ? false : results?.price ? false : true}
+        error={isFormFresh.current ? false : price?.price ? false : true}
         errorMessage="Invalid Symbol"
+        value={formFields.symbol}
       />
     </div>
     <div>
@@ -129,7 +169,7 @@ export default function AddTodoForm() {
         className="max-w-sm"
         placeholder="Price..."
         readOnly
-        value={results?.price ? results.price : ""}
+        value={price?.price ? price.price : ""}
       />
     </div>
     <div>
@@ -140,8 +180,13 @@ export default function AddTodoForm() {
       </Select>
     </div>
     <div className="flex gap-2">
-      <Button className="" disabled={isFormPending || ((results?.price && datePickerInput )? false : true)}>Add</Button>
+      <Submit price={price} datePickerInput={datePickerInput}/>
       <Link href={`/`}> <Button className="">Cancel</Button></Link>
     </div>
   </form>;
+}
+
+function Submit({price, datePickerInput}: {price: {price: number}, datePickerInput: string}) {
+  const {pending} = useFormStatus();
+  return <Button className="" disabled={(!pending && ((price?.price && datePickerInput )) ? false : true)}>Save</Button>
 }

@@ -3,6 +3,7 @@ import { UpdateTodo } from "@/services/databaseOperations"
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
+import sleep from "@/utils/sleep"
 const schema = z.object({
     id: z.number(),
     title: z
@@ -42,7 +43,9 @@ export default async function editTodoAction(prevState: any, formData: FormData)
         }
     } else {
         const data = validatedFields.data
-        await UpdateTodo(data)          
+        await UpdateTodo(data)
+        // 0.2 seconds delay to prevent double click
+        await sleep(0.2)          
         revalidatePath('/table')
         return {
             message : "{\"status\":\"To-Do edited successfully!\"}"
