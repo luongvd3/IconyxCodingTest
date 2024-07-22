@@ -1,6 +1,6 @@
 Run Instruction
 - Make sure that .Net 8.0 is installed with Visual Studio 2022    
-- After cloning the repository from Github, from Visual Studio 2022, go to File -> Open -> Project Solution -> select question2-sudoku/Sudoku/Sudoku.sln  
+- After cloning the repository from Github, from Visual Studio 2022, go to File -> Open -> Project/Solution -> select question2-sudoku/Sudoku/Sudoku.sln  
 - Press "F5" to run the application in debug mode or "Ctrl + F5" to run without debug  
 - Press "Ctrl + R,A" to run unit tests   
 
